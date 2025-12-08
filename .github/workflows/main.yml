@@ -28,7 +28,7 @@ jobs:
         with:
           node-version: '20.19.6' # Utilise Node v20 (LTS)
           cache: 'npm'
-          cach-dependency-path: ./lesson3_IntegrationContinue/exemple1_helloapp_ci/package-lock.json
+          cach-dependency-path: lesson3_IntegrationContinue/exemple1_helloapp_ci/package-lock.json
 
       - name: Installation des dépendances
         run: npm ci
