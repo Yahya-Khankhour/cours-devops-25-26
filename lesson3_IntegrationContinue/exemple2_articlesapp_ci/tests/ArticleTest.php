@@ -4,7 +4,7 @@
  */
 use PHPUnit\Framework\TestCase;
 
-require_once __DIR__ . '/../src/Article.php';
+require_once __DIR__ . '/../app/Article.php';
 
 class ArticleTest extends TestCase {
     public function testArticleCreation() {

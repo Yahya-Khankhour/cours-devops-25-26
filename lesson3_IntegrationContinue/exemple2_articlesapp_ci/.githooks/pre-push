@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "🔎 Pre-push: running CI checks and Docker tests..."
+
+# Ensure composer deps are installed
+if [ ! -d "vendor" ]; then
+  echo "Installing composer dependencies..."
+  composer install --no-interaction --optimize-autoloader
+fi
+
+echo "▶️ Composer CI checks (lint, analyse, tests)"
+composer ci
+
+echo "🐳 Building Docker test image for pre-push..."
+if command -v docker >/dev/null 2>&1; then
+  docker build -f docker/Dockerfile.test -t articlesapp-test-prepush .
+  echo "🚀 Running tests inside Docker (pre-push)..."
+  docker run --rm articlesapp-test-prepush
+else
+  echo "⚠️ Docker not available; skipping containerized tests."
+fi
+
+echo "✅ Pre-push checks passed. Proceeding with push."

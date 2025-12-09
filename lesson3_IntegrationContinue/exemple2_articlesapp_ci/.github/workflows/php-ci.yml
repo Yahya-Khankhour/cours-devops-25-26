@@ -30,19 +30,19 @@ jobs:
       run: composer install --no-interaction --optimize-autoloader
     
     - name: Check PHP syntax
-      run: find src -name "*.php" -exec php -l {} \;
+      run: find app -name "*.php" -exec php -l {} \;
     
     - name: Run PHP Code Sniffer (PSR-12)
-      run: vendor/bin/phpcs --standard=PSR12 src/
+      run: vendor/bin/phpcs --standard=PSR12 app/
     
     - name: Run PHP Mess Detector
-      run: vendor/bin/phpmd src text cleancode,codesize,controversial,design,naming,unusedcode
+      run: vendor/bin/phpmd app text cleancode,codesize,controversial,design,naming,unusedcode
     
     - name: Run PHP Copy/Paste Detector
-      run: vendor/bin/phpcpd src/
+      run: vendor/bin/phpcpd app/
     
     - name: Run PHPStan Static Analysis
-      run: vendor/bin/phpstan analyse src --level=5 --no-progress
+      run: vendor/bin/phpstan analyse app --level=5 --no-progress
     
     - name: Run PHPUnit Tests
       run: vendor/bin/phpunit --bootstrap tests/bootstrap.php tests/ --coverage-clover=coverage.xml

@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "🔎 Pre-commit: running quality checks and Docker tests..."
+
+# Ensure composer deps are installed
+if [ ! -d "vendor" ]; then
+  echo "Installing composer dependencies..."
+  composer install --no-interaction --optimize-autoloader
+fi
+
+# Make sure script is executable and run checks
+chmod +x scripts/quality_check.sh || true
+./scripts/quality_check.sh
+
+echo "✅ Code quality and unit tests passed."
+
+echo "🐳 Building Docker test image..."
+docker build -f docker/Dockerfile.test -t articlesapp-test-local .
+echo "🚀 Running tests inside Docker..."
+docker run --rm articlesapp-test-local
+
+echo "✅ Docker tests passed. Proceeding with commit."

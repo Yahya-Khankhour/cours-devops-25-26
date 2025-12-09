@@ -21,7 +21,7 @@
     },
     "autoload": {
         "psr-4": {
-            "ArticlesApp\\": "src/"
+            "ArticlesApp\\": "app/"
         }
     },
     "autoload-dev": {
@@ -31,11 +31,11 @@
     },
     "scripts": {
         "test": "phpunit --testdox --colors=always",
-        "lint": "phpcs --standard=PSR12 src/ tests/",
-        "lint-fix": "phpcbf --standard=PSR12 src/ tests/",
-        "analyse": "phpstan analyse src --level=5",
-        "mess": "phpmd src text cleancode,codesize,design,naming,unusedcode",
-        "cpd": "phpcpd src",
+        "lint": "phpcs --standard=PSR12 app/ tests/",
+        "lint-fix": "phpcbf --standard=PSR12 app/ tests/",
+        "analyse": "phpstan analyse app --level=5",
+        "mess": "phpmd app text cleancode,codesize,design,naming,unusedcode",
+        "cpd": "phpcpd app",
         "check": ["@lint", "@analyse", "@mess", "@cpd", "@test"],
         "ci": ["@lint", "@analyse", "@test"]
     },

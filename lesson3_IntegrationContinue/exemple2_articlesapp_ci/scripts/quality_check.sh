@@ -21,7 +21,7 @@ check_status() {
 
 echo -e "\n${YELLOW}1. Checking PHP Syntax...${NC}"
 echo "--------------------------------"
-for file in $(find src -name "*.php"); do
+for file in $(find app -name "*.php"); do
     php -l "$file"
     check_status "Syntax check: $file"
 done
@@ -29,7 +29,7 @@ done
 echo -e "\n${YELLOW}2. Running PHP Code Sniffer (PSR-12)...${NC}"
 echo "-----------------------------------------------"
 if command -v phpcs &> /dev/null; then
-    phpcs --standard=PSR12 src/
+    phpcs --standard=PSR12 app/
     check_status "PHP Code Sniffer"
 else
     echo "PHP Code Sniffer not installed, skipping..."
@@ -38,7 +38,7 @@ fi
 echo -e "\n${YELLOW}3. Running PHP Mess Detector...${NC}"
 echo "----------------------------------------"
 if command -v phpmd &> /dev/null; then
-    phpmd src text cleancode,codesize,controversial,design,naming,unusedcode
+    phpmd app text cleancode,codesize,controversial,design,naming,unusedcode
     check_status "PHP Mess Detector"
 else
     echo "PHPMD not installed, skipping..."
@@ -47,7 +47,7 @@ fi
 echo -e "\n${YELLOW}4. Running PHP Copy/Paste Detector...${NC}"
 echo "----------------------------------------------"
 if command -v phpcpd &> /dev/null; then
-    phpcpd src/
+    phpcpd app/
     check_status "PHP Copy/Paste Detector"
 else
     echo "PHPCPD not installed, skipping..."
@@ -56,7 +56,7 @@ fi
 echo -e "\n${YELLOW}5. Running PHPStan Static Analysis...${NC}"
 echo "---------------------------------------------"
 if command -v phpstan &> /dev/null; then
-    phpstan analyse src --level=5
+    phpstan analyse app --level=5
     check_status "PHPStan Analysis"
 else
     echo "PHPStan not installed, skipping..."

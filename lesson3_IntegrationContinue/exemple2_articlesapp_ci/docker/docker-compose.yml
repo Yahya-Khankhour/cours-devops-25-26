@@ -9,7 +9,7 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - ./src:/var/www/html
+      - ./app:/var/www/html
       - ./docker/apache-config.conf:/etc/apache2/sites-available/000-default.conf
     environment:
       - APP_ENV=development
@@ -23,7 +23,7 @@ services:
       dockerfile: docker/Dockerfile.test
     container_name: articlesapp-php-test
     volumes:
-      - ./src:/var/www/html/src
+      - ./app:/var/www/html/app
       - ./tests:/var/www/html/tests
       - ./composer.json:/var/www/html/composer.json
       - ./composer.lock:/var/www/html/composer.lock
