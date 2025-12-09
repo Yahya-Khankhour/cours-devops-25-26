@@ -1,0 +1,33 @@
+name: Docker CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  docker-ci:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    
+    - name: Docker Compose Build
+      run: docker-compose -f docker-compose.yml build php-test
+    
+    - name: Run Docker Tests
+      run: docker-compose -f docker-compose.yml run --rm php-test
+    
+    - name: Build Production Image
+      run: docker build -f docker/Dockerfile -t articlesapp:prod .
+    
+    - name: Scan Production Image
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: 'articlesapp:prod'
+        format: 'table'
+        exit-code: '1'
+        ignore-unfixed: true
+        severity: 'CRITICAL,HIGH'

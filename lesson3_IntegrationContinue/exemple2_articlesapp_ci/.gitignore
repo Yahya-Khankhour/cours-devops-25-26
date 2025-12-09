@@ -1,0 +1,33 @@
+# Dependencies
+/vendor/
+/composer.lock
+
+# Environment
+.env
+.env.local
+.env.production
+
+# Logs
+*.log
+logs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Test outputs
+coverage.xml
+test-results.xml
+.phpunit.result.cache
+
+# Docker
+.docker/
+!docker/Dockerfile
+!docker/Dockerfile.test
+!docker/apache-config.conf

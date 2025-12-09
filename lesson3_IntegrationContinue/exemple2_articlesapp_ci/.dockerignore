@@ -1,0 +1,11 @@
+.git/
+.gitignore
+.github/
+vendor/
+tests/
+coverage.xml
+test-results.xml
+*.log
+.env
+.DS_Store
+docker-compose.override.yml

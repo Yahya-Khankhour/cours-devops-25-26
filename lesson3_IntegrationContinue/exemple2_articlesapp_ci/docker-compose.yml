@@ -1,30 +1,37 @@
-version: '3.7'
+version: '3.8'
 
 services:
-    db:
-        image: mysql:5.7
-        container_name: mysql_c
-        restart: always
-        volumes:
-            - db-volume:/var/lib/mysql
-            - ./articles.sql:/docker-entrypoint-initdb.d/articles.sql
-        environment:
-            MYSQL_ROOT_PASSWORD: test
-            MYSQL_DATABASE: test
-            MYSQL_USER: test
-            MYSQL_PASSWORD: test
+  php:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: articlesapp-php
+    ports:
+      - "8080:80"
+    volumes:
+      - ./src:/var/www/html
+      - ./docker/apache-config.conf:/etc/apache2/sites-available/000-default.conf
+    environment:
+      - APP_ENV=development
+      - APP_DEBUG=true
+    networks:
+      - articlesapp-network
 
-    app:
-        build: .
-        image: myapp
-        container_name: myapp_c
-        restart: always
-        volumes:
-            - ./app:/var/www/html
-        ports:
-            - 8080:80
-        depends_on:
-            - db
+  php-test:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.test
+    container_name: articlesapp-php-test
+    volumes:
+      - ./src:/var/www/html/src
+      - ./tests:/var/www/html/tests
+      - ./composer.json:/var/www/html/composer.json
+      - ./composer.lock:/var/www/html/composer.lock
+      - ./scripts:/var/www/html/scripts
+    command: sh -c "composer install && ./scripts/quality_check.sh"
+    networks:
+      - articlesapp-network
 
-volumes:
-    db-volume:
+networks:
+  articlesapp-network:
+    driver: bridge

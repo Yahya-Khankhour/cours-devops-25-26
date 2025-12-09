@@ -1,0 +1,21 @@
+# ArticlesApp PHP with Docker CI/CD
+
+A PHP Articles application with continuous integration using Docker and GitHub Actions.
+
+## Features
+- PHP 8.1 application
+- Docker containerization
+- GitHub Actions CI/CD pipeline
+- PHPUnit testing
+- Code quality checks (PHPCS, PHPMD, PHPStan)
+- Docker security scanning
+
+## Local Development
+
+### Using Docker Compose
+```bash
+# Build and start the application
+docker-compose up php
+
+# Run tests
+docker-compose run --rm php-test

@@ -1,5 +1,4 @@
-# Development Dockerfile
-FROM php:8.1-apache
+FROM php:8.1-cli
 
 WORKDIR /var/www/html
 
@@ -12,6 +11,7 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     zip \
     unzip \
+    wget \
     && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
@@ -21,19 +21,13 @@ RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Copy application files
-COPY src/ /var/www/html/
-COPY composer.json composer.lock* ./
+COPY . /var/www/html/
 
-# Install PHP dependencies
-RUN composer install --no-interaction --optimize-autoloader --no-dev
+# Install PHP dependencies (including dev dependencies)
+RUN composer install --no-interaction --optimize-autoloader
 
-# Configure Apache
-RUN a2enmod rewrite
-COPY docker/apache-config.conf /etc/apache2/sites-available/000-default.conf
+# Make quality check script executable
+RUN chmod +x scripts/quality_check.sh
 
-# Change ownership for Apache
-RUN chown -R www-data:www-data /var/www/html
-
-EXPOSE 80
-
-CMD ["apache2-foreground"]
+# Default command - run tests
+CMD ["./scripts/quality_check.sh"]
