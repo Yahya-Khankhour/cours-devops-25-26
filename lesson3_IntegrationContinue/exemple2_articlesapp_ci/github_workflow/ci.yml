@@ -44,7 +44,7 @@ jobs:
         chmod +x scripts/quality_check.py  # If you created this
         python scripts/quality_check.py
     
-    # Step 7: Upload test results (optional)
+
     - name: Upload test results
       uses: actions/upload-artifact@v3
       if: always()
