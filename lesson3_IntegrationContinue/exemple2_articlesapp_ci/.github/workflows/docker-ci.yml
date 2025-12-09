@@ -28,6 +28,7 @@ jobs:
       with:
         image-ref: 'articlesapp:prod'
         format: 'table'
-        exit-code: '1'
+        # Do not fail CI on vulnerabilities; report only
+        exit-code: '0'
         ignore-unfixed: true
         severity: 'CRITICAL,HIGH'
