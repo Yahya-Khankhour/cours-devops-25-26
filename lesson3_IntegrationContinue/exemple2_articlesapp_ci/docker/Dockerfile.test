@@ -7,6 +7,8 @@ RUN apt-get update && apt-get install -y \
     git \
     curl \
     libpng-dev \
+    libjpeg62-turbo-dev \
+    libfreetype6-dev \
     libonig-dev \
     libxml2-dev \
     zip \
@@ -15,7 +17,8 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+ && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -24,7 +27,8 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 COPY . /var/www/html/
 
 # Install PHP dependencies (including dev dependencies)
-RUN composer install --no-interaction --optimize-autoloader
+ENV COMPOSER_ALLOW_SUPERUSER=1
+RUN composer install --no-interaction --optimize-autoloader --prefer-dist
 
 # Make quality check script executable
 RUN chmod +x scripts/quality_check.sh

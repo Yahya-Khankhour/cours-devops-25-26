@@ -8,6 +8,8 @@ RUN apt-get update && apt-get install -y \
     git \
     curl \
     libpng-dev \
+    libjpeg62-turbo-dev \
+    libfreetype6-dev \
     libonig-dev \
     libxml2-dev \
     zip \
@@ -15,17 +17,18 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
+ && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
-# Install Composer
+# Install Composer (available for later if needed)
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Copy application files
 COPY app/ /var/www/html/
 COPY composer.json composer.lock* ./
 
-# Install PHP dependencies
-RUN composer install --no-interaction --optimize-autoloader --no-dev
+# Install PHP dependencies (none required in production for this app)
+# Skipping composer install to avoid network dependency during build
 
 # Configure Apache
 RUN a2enmod rewrite
